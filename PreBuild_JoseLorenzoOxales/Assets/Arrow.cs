@@ -9,23 +9,44 @@ public class Arrow : MonoBehaviour
     [SerializeField] Sprite[] sprites;
 
     public int assignedArrow;
-    bool inRange = false;
+    public bool inRange = false;
+
+    public bool isInverted;
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine("spin");
         assignedArrow = Random.Range(0, sprites.Length - 1);
-
-        arrow.sprite = sprites[assignedArrow];
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    private void OnTriggerEnter2D(Collider2D collision)
+    { 
+        if (collision.CompareTag("Player"))
+        {
+            inRange = true;
+            StopCoroutine("spin");
+            arrow.sprite = sprites[assignedArrow];
 
+            if (!isInverted)
+            {
+                arrow.color = Color.green;
+            }
+            else if (isInverted)
+            {
+                arrow.color = Color.red;
+                if (assignedArrow == 0)
+                    arrow.sprite = sprites[1];
+                else if (assignedArrow == 1)
+                    arrow.sprite = sprites[0];
+                else if (assignedArrow == 2)
+                    arrow.sprite = sprites[3];
+                else if (assignedArrow == 3)
+                    arrow.sprite = sprites[2];
+            }
+        }
     }
 
-    IEnumerator spin()
+        IEnumerator spin()
     {
         while (!inRange)
         {

@@ -10,17 +10,16 @@ public class PlayerController : MonoBehaviour
     private Vector2 touchInputStart;
     private Vector2 touchInputEnd;
 
+    public int InputState = 4;
+
     public GameObject attackBox;
 
-    enum Direction { Up, Down, Left, Right, Neutral };
-
-    Direction directionInput;
+    [SerializeField] GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
-        //attackBox.SetActive(false);
-        directionInput = Direction.Neutral;
+        attackBox.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,13 +48,13 @@ public class PlayerController : MonoBehaviour
                         if (touchInputStart.x < touchInputEnd.x)
                         {
                             Debug.Log("Swiped Right");
-                            directionInput = Direction.Right;
+                            InputState = 3;
                         }
 
                         else if (touchInputStart.x > touchInputEnd.x)
                         {
                             Debug.Log("Swiped Left");
-                            directionInput = Direction.Left;
+                            InputState = 2;
                         }
                     }
 
@@ -64,13 +63,13 @@ public class PlayerController : MonoBehaviour
                         if (touchInputStart.y < touchInputEnd.y)
                         {
                             Debug.Log("Swiped Up");
-                            directionInput = Direction.Up;
+                            InputState = 0;
                         }
 
                         else if (touchInputStart.y > touchInputEnd.y)
                         {
                             Debug.Log("Swiped Down");
-                            directionInput = Direction.Down;
+                            InputState = 1;
                         }
                     }
 
@@ -96,17 +95,19 @@ public class PlayerController : MonoBehaviour
         StartCoroutine("attackCoroutine");
     }
 
-    public int GetDirection()
-    {
-        return ((int)directionInput);
-    }
-
     private IEnumerator attackCoroutine()
     {
         attackBox.SetActive(true);
 
         yield return new WaitForSeconds(0.3f);
         attackBox.SetActive(false);
-        directionInput = Direction.Neutral;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            //Die or Take Damage
+        }
     }
 }

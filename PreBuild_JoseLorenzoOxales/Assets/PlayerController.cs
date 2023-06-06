@@ -13,13 +13,15 @@ public class PlayerController : MonoBehaviour
     public int InputState = 4;
 
     public GameObject attackBox;
+    public GameObject sprite;
 
-    [SerializeField] GameObject player;
+    public bool isDead;
 
     // Start is called before the first frame update
     void Start()
     {
         attackBox.SetActive(false);
+        isDead = false;
     }
 
     // Update is called once per frame
@@ -92,10 +94,10 @@ public class PlayerController : MonoBehaviour
 
     public void attack()
     {
-        StartCoroutine("attackCoroutine");
+        StartCoroutine("CO_Attack");
     }
 
-    private IEnumerator attackCoroutine()
+    private IEnumerator CO_Attack()
     {
         attackBox.SetActive(true);
 
@@ -103,11 +105,12 @@ public class PlayerController : MonoBehaviour
         attackBox.SetActive(false);
     }
 
+
+    //Player Death
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            //Die or Take Damage
-        }
+        sprite.SetActive(false);
+        speed = 0f;
+        isDead = true;
     }
 }

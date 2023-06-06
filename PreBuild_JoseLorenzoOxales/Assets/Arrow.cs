@@ -12,11 +12,36 @@ public class Arrow : MonoBehaviour
     public bool inRange = false;
 
     public bool isInverted;
+    public bool isCycling;
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine("spin");
+        if (isCycling)
+        {
+            StartCoroutine("CO_Spin");
+            arrow.color = Color.yellow;
+        }
+
         assignedArrow = Random.Range(0, sprites.Length - 1);
+
+        if (!isInverted && !isCycling)
+        {
+            arrow.color = Color.green;
+            arrow.sprite = sprites[assignedArrow];
+        }
+        else if (isInverted && !isCycling)
+        {
+            arrow.color = Color.red;
+            if (assignedArrow == 0)
+                arrow.sprite = sprites[1];
+            else if (assignedArrow == 1)
+                arrow.sprite = sprites[0];
+            else if (assignedArrow == 2)
+                arrow.sprite = sprites[3];
+            else if (assignedArrow == 3)
+                arrow.sprite = sprites[2];
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -24,29 +49,17 @@ public class Arrow : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             inRange = true;
-            StopCoroutine("spin");
-            arrow.sprite = sprites[assignedArrow];
 
-            if (!isInverted)
+            if (isCycling)
             {
+                StopCoroutine("CO_Spin");
+                arrow.sprite = sprites[assignedArrow];
                 arrow.color = Color.green;
-            }
-            else if (isInverted)
-            {
-                arrow.color = Color.red;
-                if (assignedArrow == 0)
-                    arrow.sprite = sprites[1];
-                else if (assignedArrow == 1)
-                    arrow.sprite = sprites[0];
-                else if (assignedArrow == 2)
-                    arrow.sprite = sprites[3];
-                else if (assignedArrow == 3)
-                    arrow.sprite = sprites[2];
             }
         }
     }
 
-        IEnumerator spin()
+    IEnumerator CO_Spin()
     {
         while (!inRange)
         {
@@ -54,4 +67,6 @@ public class Arrow : MonoBehaviour
             arrow.sprite = sprites[Random.Range(0, sprites.Length - 1)];
         }
     }
+
+    //Choose whether to keep inRange or just leave Coroutine as a while(true)
 }

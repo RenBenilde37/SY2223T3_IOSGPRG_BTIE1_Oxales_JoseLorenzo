@@ -11,7 +11,7 @@ public class Attack : MonoBehaviour
     {
         Debug.Log("Touched" + collision.gameObject.name);
 
-        if (playerInput.GetComponent<PlayerController>().InputState == collision.gameObject.GetComponent<Arrow>().assignedArrow)
+        if (playerInput.GetComponent<PlayerController>().InputState == collision.gameObject.GetComponent<Arrow>().assignedArrow || playerInput.GetComponent<PlayerController>().isDash)
         {
             Destroy(collision.gameObject);
             SpawnManager.Instance.RemoveEnemyFromList(collision.gameObject);

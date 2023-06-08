@@ -5,17 +5,19 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 1f;
+    public float dashSpeed = 20f;
 
     public float swipeDeadzone = 10;
     private Vector2 touchInputStart;
     private Vector2 touchInputEnd;
 
-    public int InputState = 4;
+    public int InputState = 5;
 
     public GameObject attackBox;
     public GameObject sprite;
 
     public bool isDead;
+    public bool isDash;
 
     // Start is called before the first frame update
     void Start()
@@ -75,12 +77,14 @@ public class PlayerController : MonoBehaviour
                         }
                     }
 
-                    attack();
+                    attack(0.3f, false);
                 }
 
                 else
                 {
                     Debug.Log("Tapped");
+
+                    attack(0.3f, true);
                 }
             }
         }
@@ -92,16 +96,25 @@ public class PlayerController : MonoBehaviour
         transform.Translate(transform.up * speed * Time.deltaTime);
     }
 
-    public void attack()
+    public void attack(float duration, bool isDash)
     {
-        StartCoroutine("CO_Attack");
+        StartCoroutine(CO_Attack(duration, isDash));
     }
 
-    private IEnumerator CO_Attack()
+    private IEnumerator CO_Attack(float duration, bool isDash)
     {
-        attackBox.SetActive(true);
+        float originalSpeed;
+        originalSpeed = speed;
 
-        yield return new WaitForSeconds(0.3f);
+        attackBox.SetActive(true);
+        this.isDash = isDash;
+
+        if (isDash)
+            speed = dashSpeed;
+
+        yield return new WaitForSeconds(duration);
+        this.isDash = false;
+        speed = originalSpeed;
         attackBox.SetActive(false);
     }
 

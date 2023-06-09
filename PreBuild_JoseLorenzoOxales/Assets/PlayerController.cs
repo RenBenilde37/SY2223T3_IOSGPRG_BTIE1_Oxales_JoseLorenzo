@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 1f;
     public float dashSpeed = 20f;
     public float dashCooldown = 5f;
+
+    float dashRegen;
 
     public float swipeDeadzone = 10;
     private Vector2 touchInputStart;
@@ -17,16 +20,21 @@ public class PlayerController : MonoBehaviour
     public GameObject attackBox;
     public GameObject sprite;
 
-    public bool isDead;
+    public Image dashBar;
 
+    public bool isDead;
     public bool isDash;
+    public bool isDashAvailable;
 
     // Start is called before the first frame update
     void Start()
     {
         attackBox.SetActive(false);
         isDead = false;
-        isDash = true;
+        isDash = false;
+        isDashAvailable = true;
+
+        dashRegen = dashCooldown;
     }
 
     // Update is called once per frame
@@ -80,16 +88,22 @@ public class PlayerController : MonoBehaviour
                         }
                     }
 
-                    attack(0.3f, false);
+                    attack(0.1f, false);
                 }
 
                 else
                 {
                     Debug.Log("Tapped");
-
-                        attack(0.3f, isDash);
+                    if (isDashAvailable)
+                    attack(0.3f, true);
                 }
             }
+        }
+
+        if (dashRegen < dashCooldown)
+        {
+            dashRegen += 1 * Time.deltaTime;
+            dashBar.fillAmount = dashRegen / dashCooldown;
         }
     }
 
@@ -110,25 +124,26 @@ public class PlayerController : MonoBehaviour
         originalSpeed = speed;
 
         attackBox.SetActive(true);
-        this.isDash = isDash;
 
-        if (isDash)
+        if (isDashAvailable && isDash)
         {
+            this.isDash = true;
+            isDashAvailable = false;
             speed = dashSpeed;
-            this.isDash = false;
+            dashRegen = 0;
             StartCoroutine(CO_DashCooldown(dashCooldown));
         }
 
         yield return new WaitForSeconds(duration);
-        
         speed = originalSpeed;
         attackBox.SetActive(false);
+        this.isDash = false;
     }
 
     private IEnumerator CO_DashCooldown(float duration)
     {
         yield return new WaitForSeconds(duration);
-        isDash = true;
+        isDashAvailable = true;
     }
 
     //Player Death

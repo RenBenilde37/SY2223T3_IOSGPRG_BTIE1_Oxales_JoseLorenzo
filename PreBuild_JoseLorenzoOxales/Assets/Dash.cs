@@ -1,20 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Dash : MonoBehaviour
 {
-    public GameObject playerInput;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Image dashGaugeSprite;
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateBar(float max, float time)
     {
-        
-    }
 
+    }
 }

@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 1f;
     public float dashSpeed = 20f;
+    public float dashCooldown = 5f;
 
     public float swipeDeadzone = 10;
     private Vector2 touchInputStart;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public GameObject sprite;
 
     public bool isDead;
+
     public bool isDash;
 
     // Start is called before the first frame update
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         attackBox.SetActive(false);
         isDead = false;
+        isDash = true;
     }
 
     // Update is called once per frame
@@ -84,7 +87,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("Tapped");
 
-                    attack(0.3f, true);
+                        attack(0.3f, isDash);
                 }
             }
         }
@@ -110,14 +113,23 @@ public class PlayerController : MonoBehaviour
         this.isDash = isDash;
 
         if (isDash)
+        {
             speed = dashSpeed;
+            this.isDash = false;
+            StartCoroutine(CO_DashCooldown(dashCooldown));
+        }
 
         yield return new WaitForSeconds(duration);
-        this.isDash = false;
+        
         speed = originalSpeed;
         attackBox.SetActive(false);
     }
 
+    private IEnumerator CO_DashCooldown(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        isDash = true;
+    }
 
     //Player Death
     private void OnTriggerEnter2D(Collider2D collision)

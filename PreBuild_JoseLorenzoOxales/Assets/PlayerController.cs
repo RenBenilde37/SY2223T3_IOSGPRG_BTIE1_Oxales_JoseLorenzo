@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,10 +18,17 @@ public class PlayerController : MonoBehaviour
 
     public int InputState = 5;
 
+    public Health health = new Health(1, 3);
+
     public GameObject attackBox;
     public GameObject sprite;
 
     public Image dashBar;
+
+    public TextMeshProUGUI livesText;
+
+    int score;
+    public TextMeshProUGUI scoreText;
 
     public bool isDead;
     public bool isDash;
@@ -35,6 +43,9 @@ public class PlayerController : MonoBehaviour
         isDashAvailable = true;
 
         dashRegen = dashCooldown;
+
+        UpdateLivesCounter();
+        scoreText.text = "Score: 0";
     }
 
     // Update is called once per frame
@@ -95,7 +106,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("Tapped");
                     if (isDashAvailable)
-                    attack(0.3f, true);
+                        attack(0.3f, true);
                 }
             }
         }
@@ -146,11 +157,33 @@ public class PlayerController : MonoBehaviour
         isDashAvailable = true;
     }
 
-    //Player Death
     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (health.HealthComponent > 0)
+        {
+            health.DamageHealth(1);
+            UpdateLivesCounter();
+        }
+
+        else if (health.HealthComponent == 0)
+            Die();
+    }
+
+    public void Die()
     {
         sprite.SetActive(false);
         speed = 0f;
         isDead = true;
+    }
+
+    public void UpdateLivesCounter()
+    {
+        livesText.text = "Lives: " + health.HealthComponent.ToString();
+    }
+
+    public void AddScore(int addScore)
+    {
+        score += addScore;
+        scoreText.text = "Score: " + score.ToString(); 
     }
 }

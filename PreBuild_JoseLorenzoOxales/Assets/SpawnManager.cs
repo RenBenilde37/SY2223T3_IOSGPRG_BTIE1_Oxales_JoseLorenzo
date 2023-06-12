@@ -21,12 +21,6 @@ public class SpawnManager : Singleton<SpawnManager>
         StartCoroutine(CO_SpawnEnemy(spawnFrequency));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void RemoveEnemyFromList(GameObject enemy)
     {
         enemies.Remove(enemy);

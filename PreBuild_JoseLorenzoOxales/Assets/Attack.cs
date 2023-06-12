@@ -13,13 +13,28 @@ public class Attack : MonoBehaviour
 
         if (playerInput.GetComponent<PlayerController>().InputState == collision.gameObject.GetComponent<Arrow>().assignedArrow || playerInput.GetComponent<PlayerController>().isDash)
         {
-            Destroy(collision.gameObject);
             SpawnManager.Instance.RemoveEnemyFromList(collision.gameObject);
+            Destroy(collision.gameObject);
 
             powerup.RollPowerUp();
+
+            if (!playerInput.GetComponent<PlayerController>().isDash)
+            {
+                playerInput.GetComponent<PlayerController>().AddScore(20);
+            }
+
+            else if (playerInput.GetComponent<PlayerController>().isDash)
+            {
+                playerInput.GetComponent<PlayerController>().AddScore(35);
+            }
+
+        }
+
+        else if(playerInput.GetComponent<PlayerController>().InputState != collision.gameObject.GetComponent<Arrow>().assignedArrow && !playerInput.GetComponent<PlayerController>().isDash)
+        {
+            playerInput.GetComponent<PlayerController>().health.DamageHealth(1);
+            playerInput.GetComponent<PlayerController>().UpdateLivesCounter();
         }
     }
-
-    //to shorten code, include local variables inside function
 }
 

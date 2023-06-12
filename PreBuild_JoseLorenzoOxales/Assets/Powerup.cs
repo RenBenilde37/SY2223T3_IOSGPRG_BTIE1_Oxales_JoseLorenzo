@@ -5,21 +5,16 @@ using UnityEngine;
 public class Powerup : MonoBehaviour
 {
     public Attack attack;
-
-    int extraLives;
-
-    public void AddLife()
-    {
-        extraLives++;
-    }
+    public PlayerController player;
 
     public void RollPowerUp()
     {
         int random = Random.Range(0, 100);
 
-        if(random < 3)
+        if(random < 50)
         {
-            AddLife();
+            player.health.Heal(1);
+            player.UpdateLivesCounter();
             Debug.Log("Added Life");
         }
     }

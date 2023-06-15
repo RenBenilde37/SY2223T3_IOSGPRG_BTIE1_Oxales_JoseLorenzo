@@ -25,9 +25,8 @@ public class PlayerController : MonoBehaviour
 
     public Image dashBar;
 
-    public TextMeshProUGUI livesText;
-
     int score;
+    public TextMeshProUGUI livesText;
     public TextMeshProUGUI scoreText;
 
     public bool isDead;
@@ -38,6 +37,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         attackBox.SetActive(false);
+
         isDead = false;
         isDash = false;
         isDashAvailable = true;

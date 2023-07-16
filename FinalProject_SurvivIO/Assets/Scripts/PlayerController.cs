@@ -7,26 +7,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject playerModel;
 
+    [SerializeField] private PlayerInventory inventory;
+
     [SerializeField] private FixedJoystick joystickMovement;
     [SerializeField] private FixedJoystick joystickAim;
 
-    [SerializeField] public Ammo ammoPistol = new Ammo(15, 90);
-    [SerializeField] public Ammo ammoRifle = new Ammo(30, 120);
-    [SerializeField] public Ammo ammoShotgun = new Ammo(2, 60);
-
 
     public float speed = 1f;
-
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    private bool isReloading;
 
     private void FixedUpdate()
     {
@@ -39,5 +27,61 @@ public class PlayerController : MonoBehaviour
 
         if (joystickAim.Horizontal != 0 && joystickAim.Vertical != 0)
         playerModel.transform.right = new Vector3(joystickAim.Horizontal, joystickAim.Vertical);
+    }
+
+    public void Shoot()
+    {
+        if (!isReloading)
+        {
+            if (inventory.EquippedGun)
+            {
+                Debug.Log("Player Input Fired");
+                inventory.EquippedGun.GetComponent<Gun>().Fire();
+
+            }
+
+            else
+                Debug.Log("No Gun");
+        }
+    }
+
+    public void Reload()
+    {
+        if (!isReloading) {
+
+            if (!inventory.EquippedGun.GetComponent<Gun>().gunAmmo.isTotallyEmpty())
+            {
+                StartCoroutine(CO_Reload());
+            }
+
+            else if (!inventory.EquippedGun)
+                Debug.Log("No Gun to Reload");
+
+            else
+            {
+                Debug.Log("Gun Totally Empty");
+            }
+        }
+    }
+
+    public void SwitchWeapon()
+    {
+        inventory.SwitchWeapon();
+    }
+
+    IEnumerator CO_Reload()
+    {
+        Debug.Log("Reloading...");
+        isReloading = true;
+        yield return new WaitForSeconds(1.5f);
+
+        inventory.EquippedGun.GetComponent<Gun>().Reload();
+        isReloading = false;
+        Debug.Log("Reloaded");
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Damage Code
     }
 }

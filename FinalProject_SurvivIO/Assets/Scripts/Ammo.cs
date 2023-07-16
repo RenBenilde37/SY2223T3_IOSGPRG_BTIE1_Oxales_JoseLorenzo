@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class Ammo //MonoBehaviour
+public class Ammo // MonoBehaviour
 {
     int ammoMaxCapacity;
     int clipCapacity;
@@ -18,7 +19,7 @@ public class Ammo //MonoBehaviour
 
     public void AddClip()
     {
-        if(currentAmmoReserve != ammoMaxCapacity)
+        if(currentAmmoReserve < ammoMaxCapacity)
         {
             currentAmmoReserve += clipCapacity;
 
@@ -29,20 +30,65 @@ public class Ammo //MonoBehaviour
         }
     }
 
-    public void RemoveAmmoFromClip(int amount)
+    public void RemoveAmmoFromClip()
     {
         if (currentClipCapacity > 0)
         {
-            currentClipCapacity -= amount;
+            currentClipCapacity--;
         }
     }
 
-    public void Reload(int ammoLoaded)
+    public void FillClip()
     {
-        if (currentClipCapacity < clipCapacity)
+        currentClipCapacity = clipCapacity;
+    }
+
+    public void Reload()
+    {
+        if (currentClipCapacity < clipCapacity && currentAmmoReserve > 0)
         {
-            currentAmmoReserve -= (clipCapacity - currentClipCapacity);
-            currentClipCapacity = clipCapacity;
+            currentAmmoReserve += currentClipCapacity;
+
+            if (currentAmmoReserve <= clipCapacity)
+            {
+                currentClipCapacity = currentAmmoReserve;
+                currentAmmoReserve = 0;
+            }
+
+            else
+            {
+                currentClipCapacity = clipCapacity;
+                currentAmmoReserve -= clipCapacity;
+            }
         }
+    }
+
+    public bool isClipEmpty()
+    {
+        if (currentClipCapacity <= 0)
+            return true;
+
+        else
+            return false;
+    }
+
+    public bool isTotallyEmpty()
+    {
+        if (currentClipCapacity <= 0 && currentAmmoReserve <= 0)
+            return true;
+
+        else
+            return false;
+    }
+
+
+    public int GetCurrentClipCapacity()
+    {
+        return currentClipCapacity;
+    }
+
+    public int GetCurrentAmmoReserve()
+    {
+        return currentAmmoReserve;
     }
 }

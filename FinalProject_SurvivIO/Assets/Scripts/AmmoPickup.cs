@@ -4,28 +4,34 @@ using UnityEngine;
 
 public class AmmoPickup : MonoBehaviour
 {
-    public string ammoType;
     //[SerializeField] private GameObject player;
+
+    public bool is9mm;
+    public bool is556mm;
+    public bool is12ga;
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        string playerName = collision.gameObject.name;
+
         if (collision.gameObject.name == "Player")
         {
-            if (ammoType == "pistol")
-            {
-                Debug.Log("Touched " + collision.gameObject.name);
-                collision.gameObject.GetComponent<PlayerController>().ammoPistol.AddClip();
+            PlayerInventory player = collision.gameObject.GetComponent<PlayerInventory>();
+
+            if (is9mm) { 
+                Debug.Log("Touched " + playerName);
+                player.ammoPistol.AddClip();
             }
 
-            else if (ammoType == "rifle")
+            if (is556mm)
             {
-                Debug.Log("Touched " + collision.gameObject.name);
-                collision.gameObject.GetComponent<PlayerController>().ammoRifle.AddClip();
+                Debug.Log("Touched " + playerName);
+                player.ammoRifle.AddClip();
             }
 
-            else if (ammoType == "shotgun")
+            if (is12ga)
             {
-                Debug.Log("Touched " + collision.gameObject.name);
-                collision.gameObject.GetComponent<PlayerController>().ammoShotgun.AddClip();
+                Debug.Log("Touched " + playerName);
+                player.ammoShotgun.AddClip();
             }
 
             Destroy(gameObject);

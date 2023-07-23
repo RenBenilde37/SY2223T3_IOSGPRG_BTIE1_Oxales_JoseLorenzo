@@ -8,7 +8,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.name != "Player")
-        Destroy(gameObject);
+        Debug.Log("Collided with " + collision.gameObject.name);
+        if (collision.name != "Player")
+        {
+            Destroy(gameObject);
+        }
     }
 }

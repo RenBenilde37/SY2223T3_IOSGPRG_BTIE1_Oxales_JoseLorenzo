@@ -13,6 +13,12 @@ public class Gun : MonoBehaviour
     public bool isRifle;
     public bool isShotgun;
 
+    public float shotgunSpread;
+    public int pelletCount;
+
+    public bool isAutoActive;
+    [SerializeField] public float autoFireRate;
+
     public Ammo gunAmmo;
 
     // Start is called before the first frame update
@@ -44,13 +50,28 @@ public class Gun : MonoBehaviour
     {
         if (!gunAmmo.isClipEmpty())
         {
+            GameObject bullet;
+            Vector3 playerPosition = gameObject.transform.position;
+            Quaternion playerRotation = gameObject.transform.rotation;
 
 
-            GameObject bullet = Instantiate(bulletPrefab, gameObject.transform.position, gameObject.transform.rotation);
-            bullet.GetComponent<Rigidbody2D>().velocity = gameObject.transform.up * bulletVelocity;
+            if (isPistol || isRifle)
+            {
+                bullet = Instantiate(bulletPrefab, playerPosition, playerRotation);
+                bullet.GetComponent<Rigidbody2D>().velocity = gameObject.transform.up * bulletVelocity;
 
-            //Uses AddForce()
-            //bullet.GetComponent<Rigidbody2D>().AddForce(gameObject.transform.right * bulletVelocity, ForceMode2D.Impulse);
+                StartCoroutine("CO_AutoFire");
+            }
+
+            else if (isShotgun)
+            {
+                for (int i = 0; i < pelletCount; i++)
+                {
+                    bullet = Instantiate(bulletPrefab, playerPosition, playerRotation);
+                    bullet.transform.Rotate(0, 0, Random.Range(-shotgunSpread, shotgunSpread));
+                    bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * (bulletVelocity * Random.Range(0.8f,1f));
+                }
+            }
 
             gunAmmo.RemoveAmmoFromClip();
             Debug.Log("Gun Fired. " + gunAmmo.GetCurrentClipCapacity() + " remaining in Clip. " + gunAmmo.GetCurrentAmmoReserve() + " Remaining in Reserves.");
@@ -63,9 +84,23 @@ public class Gun : MonoBehaviour
         }
     }
 
-        public void Reload()
+    public void Reload()
     {
         gunAmmo.Reload();
         Debug.Log("Gun Reloaded!");
+    }
+
+    public void SetAutomatic(bool isAuto)
+    {
+        isAutoActive = isAuto;
+    }
+
+    IEnumerator CO_AutoFire()
+    {
+        yield return new WaitForSeconds(autoFireRate);
+        if (isRifle && isAutoActive)
+        {
+            Fire();
+        }
     }
 }

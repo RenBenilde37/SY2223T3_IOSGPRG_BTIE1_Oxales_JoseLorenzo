@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private FixedJoystick joystickMovement;
     [SerializeField] private FixedJoystick joystickAim;
-
+    [SerializeField] private HUD hud;
 
     public float speed = 1f;
     private bool isReloading;

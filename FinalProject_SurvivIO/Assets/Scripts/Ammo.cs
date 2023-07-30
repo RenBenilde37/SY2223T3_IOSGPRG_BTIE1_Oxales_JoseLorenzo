@@ -43,8 +43,14 @@ public class Ammo // MonoBehaviour
         currentClipCapacity = clipCapacity;
     }
 
+    public void SetInfiniteAmmo()
+    {
+        currentAmmoReserve = 999;
+    }
+
     public void Reload()
     {
+
         if (currentClipCapacity < clipCapacity && currentAmmoReserve > 0)
         {
             currentAmmoReserve += currentClipCapacity;

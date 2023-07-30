@@ -21,6 +21,8 @@ public class Gun : MonoBehaviour
 
     public Ammo gunAmmo;
 
+    public bool infiniteAmmo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,13 +81,21 @@ public class Gun : MonoBehaviour
             if (gunAmmo.isClipEmpty())
             {
                 Debug.Log("Gun Empty!");
+
+                if(player.GetComponent<PlayerController>())
                 player.GetComponent<PlayerController>().Reload();
+
+                if (player.GetComponent<EnemyControl>())
+                    player.GetComponent<EnemyControl>().Reload();
             }
         }
     }
 
     public void Reload()
     {
+        if(infiniteAmmo)
+            gunAmmo.SetInfiniteAmmo();
+
         gunAmmo.Reload();
         Debug.Log("Gun Reloaded!");
     }

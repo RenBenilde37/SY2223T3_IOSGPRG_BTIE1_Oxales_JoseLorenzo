@@ -15,9 +15,9 @@ TagManager:
   - UI
   - Bullets
   - RangeChecker
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Bush
   - 
   - 
   - 

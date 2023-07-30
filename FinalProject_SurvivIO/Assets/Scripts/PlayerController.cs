@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
@@ -13,8 +13,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private FixedJoystick joystickAim;
     [SerializeField] private HUD hud;
 
+    public int hp;
+    public int hpMax;
+
     public float speed = 1f;
     private bool isReloading;
+
+    private bool isDead;
 
     private void FixedUpdate()
     {
@@ -64,12 +69,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool isPlayerDead()
+    {
+        return isDead;
+    }
+
     public void SwitchWeapon()
     {
         inventory.SwitchWeapon();
     }
 
-    IEnumerator CO_Reload()
+    private IEnumerator CO_Reload()
     {
         Debug.Log("Reloading...");
         isReloading = true;
@@ -80,8 +90,28 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Reloaded");
     }
 
+    private IEnumerator CO_RestartScene(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene("SampleScene");
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Damage Code
+
+        if (collision.GetComponent<Bullet>())
+        {
+            hp -= collision.GetComponent<Bullet>().damage;
+        }
+
+        if (hp <= 0)
+        {
+            playerModel.SetActive(false);
+            speed = 0;
+            player.GetComponent<CircleCollider2D>().enabled = false;
+
+            StartCoroutine(CO_RestartScene(3f));
+        }
     }
 }

@@ -6,12 +6,12 @@ public class Bullet : MonoBehaviour
 {
     //Instantiate Hit Effect Here
 
+    public int damage;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Collided with " + collision.gameObject.name);
-        if (collision.name != "Player")
-        {
-            Destroy(gameObject);
-        }
+
+        Destroy(gameObject);
     }
 }

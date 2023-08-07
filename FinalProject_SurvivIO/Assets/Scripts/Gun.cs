@@ -9,9 +9,7 @@ public class Gun : MonoBehaviour
 
     public float bulletVelocity;
 
-    public bool isPistol;
-    public bool isRifle;
-    public bool isShotgun;
+    public WeaponType weaponType;
 
     public float shotgunSpread;
     public int pelletCount;
@@ -23,41 +21,44 @@ public class Gun : MonoBehaviour
 
     public bool infiniteAmmo;
 
-    // Start is called before the first frame update
-    void Start()
+    public enum WeaponType
     {
-        if (isPistol)
+        Pistol,
+        Rifle,
+        Shotgun
+    };
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        if (gameObject.GetComponent<Gun>().weaponType == WeaponType.Pistol)
         {
             gunAmmo = player.GetComponent<PlayerInventory>().ammoPistol;
         }
 
-        else if (isRifle)
+        else if (weaponType == WeaponType.Rifle)
         {
             gunAmmo = player.GetComponent<PlayerInventory>().ammoRifle;
         }
 
-        else if (isShotgun)
+        else if (weaponType == WeaponType.Shotgun)
         {
             gunAmmo = player.GetComponent<PlayerInventory>().ammoShotgun;
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        Debug.Log(gunAmmo.ToString() + " Loaded.");
     }
 
     public void Fire()
     {
-        if (!gunAmmo.isClipEmpty())
+        if (!gunAmmo.isClipEmpty() || infiniteAmmo)
         {
             GameObject bullet;
             Vector3 playerPosition = gameObject.transform.position;
             Quaternion playerRotation = gameObject.transform.rotation;
 
 
-            if (isPistol || isRifle)
+            if (weaponType != WeaponType.Shotgun)
             {
                 bullet = Instantiate(bulletPrefab, playerPosition, playerRotation);
                 bullet.GetComponent<Rigidbody2D>().velocity = gameObject.transform.up * bulletVelocity;
@@ -65,29 +66,29 @@ public class Gun : MonoBehaviour
                 StartCoroutine("CO_AutoFire");
             }
 
-            else if (isShotgun)
+            else if (weaponType == WeaponType.Shotgun)
             {
                 for (int i = 0; i < pelletCount; i++)
                 {
                     bullet = Instantiate(bulletPrefab, playerPosition, playerRotation);
                     bullet.transform.Rotate(0, 0, Random.Range(-shotgunSpread, shotgunSpread));
-                    bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * (bulletVelocity * Random.Range(0.8f,1f));
+                    bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * (bulletVelocity * Random.Range(0.8f, 1f));
                 }
             }
 
             gunAmmo.RemoveAmmoFromClip();
             Debug.Log("Gun Fired. " + gunAmmo.GetCurrentClipCapacity() + " remaining in Clip. " + gunAmmo.GetCurrentAmmoReserve() + " Remaining in Reserves.");
+        }
 
-            if (gunAmmo.isClipEmpty())
-            {
-                Debug.Log("Gun Empty!");
+        else if (gunAmmo.isClipEmpty())
+        {
+            Debug.Log("Gun Empty!");
 
-                if(player.GetComponent<PlayerController>())
+            if (player.GetComponent<PlayerController>())
                 player.GetComponent<PlayerController>().Reload();
 
-                if (player.GetComponent<EnemyControl>())
-                    player.GetComponent<EnemyControl>().Reload();
-            }
+            if (player.GetComponent<EnemyControl>())
+                player.GetComponent<EnemyControl>().Reload();
         }
     }
 
@@ -108,7 +109,7 @@ public class Gun : MonoBehaviour
     IEnumerator CO_AutoFire()
     {
         yield return new WaitForSeconds(autoFireRate);
-        if (isRifle && isAutoActive)
+        if (weaponType == WeaponType.Rifle && isAutoActive)
         {
             Fire();
         }

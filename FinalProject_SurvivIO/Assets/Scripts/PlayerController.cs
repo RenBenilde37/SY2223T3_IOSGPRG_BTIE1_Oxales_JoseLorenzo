@@ -11,10 +11,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private FixedJoystick joystickMovement;
     [SerializeField] private FixedJoystick joystickAim;
-    [SerializeField] private HUD hud;
+    [SerializeField] public HUD hud;
 
-    public int hp;
-    public int hpMax;
+    [SerializeField] public Health health = new Health(100);
 
     public float speed = 1f;
     private bool isReloading;
@@ -43,6 +42,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Player Input Fired");
                 inventory.EquippedGun.GetComponent<Gun>().Fire();
 
+                hud.UpdateAmmo();
             }
 
             else
@@ -79,6 +79,11 @@ public class PlayerController : MonoBehaviour
         inventory.SwitchWeapon();
     }
 
+    public void UpdateHealthbar()
+    {
+        hud.UpdateHealth(health.GetHealth(), health.GetHealthMax());
+    }
+
     private IEnumerator CO_Reload()
     {
         Debug.Log("Reloading...");
@@ -88,6 +93,7 @@ public class PlayerController : MonoBehaviour
         inventory.EquippedGun.GetComponent<Gun>().Reload();
         isReloading = false;
         Debug.Log("Reloaded");
+        hud.UpdateAmmo();
     }
 
     private IEnumerator CO_RestartScene(float time)
@@ -98,14 +104,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Damage Code
 
         if (collision.GetComponent<Bullet>())
         {
-            hp -= collision.GetComponent<Bullet>().damage;
+            health.TakeDamage(collision.GetComponent<Bullet>().damage);
         }
 
-        if (hp <= 0)
+        if (health.GetHealth() <= 0)
         {
             playerModel.SetActive(false);
             speed = 0;
@@ -113,5 +118,7 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(CO_RestartScene(3f));
         }
+
+        UpdateHealthbar();
     }
 }

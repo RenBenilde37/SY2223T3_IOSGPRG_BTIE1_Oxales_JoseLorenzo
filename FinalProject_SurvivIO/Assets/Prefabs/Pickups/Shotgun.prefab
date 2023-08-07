@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4867993232026949388}
   - component: {fileID: 4867993232026949389}
   - component: {fileID: 4867993232026949394}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf73e9cb425e314e932a5b235d376e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunType: Shotgun
+  weaponType: 2
 --- !u!58 &4867993232026949394
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4867993232858609731}
   - component: {fileID: 4867993232858609730}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

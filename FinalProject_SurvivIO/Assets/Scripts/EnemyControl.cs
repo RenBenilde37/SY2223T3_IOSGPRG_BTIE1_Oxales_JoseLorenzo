@@ -8,7 +8,7 @@ public class EnemyControl : MonoBehaviour
     public float speed;
     public bool isPlayerDetected;
 
-    public int hp;
+    public Health health = new Health(100);
 
     [SerializeField] public PlayerInventory enemyInventory;
 
@@ -20,7 +20,7 @@ public class EnemyControl : MonoBehaviour
     private Vector2 waypoint;
     private Vector2 direction;
 
-    void Start()
+    private void Start()
     {
         //StartCoroutine("CO_MoveRandomly");
         target = null;
@@ -28,7 +28,7 @@ public class EnemyControl : MonoBehaviour
         StartCoroutine("CO_AutoFiring");
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (isPlayerDetected)
         {
@@ -74,11 +74,7 @@ public class EnemyControl : MonoBehaviour
     public void Reload()
     {
         if (!isReloading)
-        {
-            {
-                StartCoroutine(CO_Reload());
-            }
-        }
+            StartCoroutine(CO_Reload());
     }
 
     public void PlayerDetected(bool detection)
@@ -108,8 +104,7 @@ public class EnemyControl : MonoBehaviour
             Shoot();
         }
 
-        yield return new WaitForSeconds(0.5f);
-
+        yield return new WaitForSeconds(0.3f);
         StartCoroutine("CO_AutoFiring");
     }
 
@@ -119,10 +114,10 @@ public class EnemyControl : MonoBehaviour
 
         if (collision.GetComponent<Bullet>())
         {
-            hp -= collision.GetComponent<Bullet>().damage;
+            health.TakeDamage(collision.GetComponent<Bullet>().damage);
         }
 
-        if (hp <= 0)
+        if (health.GetHealth() <= 0)
         {
             Destroy(gameObject);
         }

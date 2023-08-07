@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    [SerializeField] public GameObject Rifle;
-    [SerializeField] public GameObject Shotgun;
-    [SerializeField] public GameObject Pistol;
+    [SerializeField] private HUD hud;
+    [SerializeField] public GameObject[] weapons;
 
     [SerializeField] public GameObject CurrentPrimary;
     [SerializeField] public GameObject EquippedGun;
@@ -17,81 +16,53 @@ public class PlayerInventory : MonoBehaviour
 
     public bool spawnWithRandomWeapon;
 
-    bool isSecondaryActive;
+    public bool isPlayer;
 
     private void Start()
-    {
-        Rifle.SetActive(false);
-        Shotgun.SetActive(false);
-        Pistol.SetActive(false);
-
-        isSecondaryActive = false;
+    { 
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            weapons[i].SetActive(false);
+        }
 
         if (spawnWithRandomWeapon)
             RandomizeWeapon();
     }
 
-    public void SwapWeapon(string gun)
+    public void SwapWeapon(Gun.WeaponType weaponType)
     {
-        //Pickup in World
+        if (weaponType != Gun.WeaponType.Pistol)
+            CurrentPrimary = weapons[((int)weaponType)];
 
-        if (gun == "Rifle")
+        weapons[((int)weaponType)].SetActive(true);
+        EquippedGun = weapons[((int)weaponType)];
+
+        for (int i = 0; i < weapons.Length; i++)
         {
-            Rifle.SetActive(true);
-            Shotgun.SetActive(false);
-            Pistol.SetActive(false);
-
-            ammoRifle.FillClip();
-
-            EquippedGun = Rifle;
-            CurrentPrimary = Rifle;
-        }
-
-        if (gun == "Shotgun")
-        {
-            Rifle.SetActive(false);
-            Shotgun.SetActive(true);
-            Pistol.SetActive(false);
-
-            ammoShotgun.FillClip();
-            EquippedGun = Shotgun;
-            CurrentPrimary = Shotgun;
-        }
-
-        if (gun == "Pistol")
-        {
-            Rifle.SetActive(false);
-            Shotgun.SetActive(false);
-            Pistol.SetActive(true);
-
-            ammoPistol.FillClip();
-            EquippedGun = Pistol;
-            isSecondaryActive = true;
+            if(i != ((int)weaponType))
+                weapons[i].SetActive(false);
         }
     }
 
     public void SwitchWeapon()
     {
-        if(isSecondaryActive && EquippedGun == CurrentPrimary)
+        Gun.WeaponType currentWeaponType = EquippedGun.GetComponent<Gun>().weaponType;
+
+        EquippedGun.SetActive(false);
+
+        if (currentWeaponType == CurrentPrimary.GetComponent<Gun>().weaponType)
         {
-            EquippedGun = Pistol;
-            Pistol.SetActive(true);
-            Rifle.SetActive(false);
-            Shotgun.SetActive(false);
+            EquippedGun = weapons[((int)Gun.WeaponType.Pistol)];
         }
 
-        else if(EquippedGun == Pistol)
+        else if(EquippedGun.GetComponent<Gun>().weaponType == Gun.WeaponType.Pistol)
         {
             EquippedGun = CurrentPrimary;
-
-            if(CurrentPrimary == Rifle)
-            Rifle.SetActive(true);
-            Pistol.SetActive(false);
-
-            if (CurrentPrimary == Shotgun)
-            Shotgun.SetActive(true);
-            Pistol.SetActive(false);
         }
+
+        EquippedGun.SetActive(true);
+
+        Debug.Log("Switched To " + currentWeaponType.ToString());
     }
 
     public void RandomizeWeapon()
@@ -100,13 +71,13 @@ public class PlayerInventory : MonoBehaviour
         switch (RandomGun)
         {
             case 0:
-                SwapWeapon("Rifle");
+                SwapWeapon(Gun.WeaponType.Pistol);
                 break;
             case 1:
-                SwapWeapon("Shotgun");
+                SwapWeapon(Gun.WeaponType.Rifle);
                 break;
             case 2:
-                SwapWeapon("Pistol");
+                SwapWeapon(Gun.WeaponType.Shotgun);
                 break;
         }
     }

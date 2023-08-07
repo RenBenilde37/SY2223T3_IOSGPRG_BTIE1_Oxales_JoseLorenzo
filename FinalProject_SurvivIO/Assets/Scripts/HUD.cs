@@ -11,30 +11,31 @@ public class HUD : MonoBehaviour
     [SerializeField] public TextMeshProUGUI rifleAmmo;
     [SerializeField] public TextMeshProUGUI shotgunAmmo;
 
+    [SerializeField] public Image healthBarSprite;
+
     [SerializeField] public PlayerInventory inventory;
 
-    
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
-        //UpdateAmmo();
+        if (inventory.EquippedGun)
+            UpdateAmmo();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateHealth(float currentHealth, float maxHealth)
     {
-        
+        healthBarSprite.fillAmount = currentHealth / maxHealth;
     }
 
     public void UpdateAmmo()
     {
-        Ammo gunAmmo = inventory.EquippedGun.GetComponent<Gun>().gunAmmo;
 
-        clip.text = gunAmmo.GetCurrentClipCapacity().ToString();
-        reserves.text = gunAmmo.GetCurrentAmmoReserve().ToString();
+        Ammo gunAmmo = inventory.EquippedGun.GetComponent<Gun>().gunAmmo;
 
         pistolAmmo.text = inventory.ammoPistol.GetCurrentAmmoReserve().ToString();
         rifleAmmo.text = inventory.ammoRifle.GetCurrentAmmoReserve().ToString();
         shotgunAmmo.text = inventory.ammoShotgun.GetCurrentAmmoReserve().ToString();
+
+        clip.text = gunAmmo.GetCurrentClipCapacity().ToString();
+        reserves.text = gunAmmo.GetCurrentAmmoReserve().ToString();
     }
 }

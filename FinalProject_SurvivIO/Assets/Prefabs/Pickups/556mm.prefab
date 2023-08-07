@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 846307585486841}
   - component: {fileID: 846307585486840}
   - component: {fileID: 846307585486843}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 556mm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
   is9mm: 0
   is556mm: 1
   is12ga: 0
+  WeaponType: 1
 --- !u!61 &846307585486843
 BoxCollider2D:
   m_ObjectHideFlags: 0

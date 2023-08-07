@@ -9,7 +9,7 @@ public class PickupSpawnManager : MonoBehaviour
     [SerializeField] public Transform[] spawnPoints;
     //public GameObject
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         for (int i = 0; i < spawnPoints.Length; i++)
         {

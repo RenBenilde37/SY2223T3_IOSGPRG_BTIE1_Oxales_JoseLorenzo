@@ -133,11 +133,9 @@ MonoBehaviour:
   player: {fileID: 6609292937672473899}
   bulletPrefab: {fileID: 7813681285278251364, guid: 1f50d1d7dbb6a1f47a3d98a033c63d6f, type: 3}
   bulletVelocity: 10
-  isPistol: 0
-  isRifle: 1
-  isShotgun: 0
+  weaponType: 1
   shotgunSpread: 0
-  pelletCount: 8
+  pelletCount: 0
   isAutoActive: 0
   autoFireRate: 0.1
   infiniteAmmo: 1
@@ -275,9 +273,7 @@ MonoBehaviour:
   player: {fileID: 6609292937672473899}
   bulletPrefab: {fileID: 5264789290622705370, guid: c20cd64b36b57ee42840054aff67ce73, type: 3}
   bulletVelocity: 10
-  isPistol: 0
-  isRifle: 0
-  isShotgun: 1
+  weaponType: 2
   shotgunSpread: 10
   pelletCount: 8
   isAutoActive: 0
@@ -331,7 +327,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3.363142
+  m_Radius: 9.498644
 --- !u!114 &6609292937595938060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,9 +427,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71102c66cbee3914f801986f4d1dea43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rifle: {fileID: 6609292936627290970}
-  Shotgun: {fileID: 6609292937440007091}
-  Pistol: {fileID: 6609292938465715833}
+  weapons:
+  - {fileID: 6609292938465715833}
+  - {fileID: 6609292936627290970}
+  - {fileID: 6609292937440007091}
   CurrentPrimary: {fileID: 0}
   EquippedGun: {fileID: 0}
   spawnWithRandomWeapon: 1
@@ -456,6 +453,8 @@ MonoBehaviour:
   enemyInventory: {fileID: 6609292937672473903}
   roamRange: 2
   maxDistance: 10
+  semiFireRate: 0.5
+  autoFireRate: 0.01
 --- !u!1 &6609292938004340915
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,9 +639,7 @@ MonoBehaviour:
   player: {fileID: 6609292937672473899}
   bulletPrefab: {fileID: 1935435853880215323, guid: 66838f84d4f8d564a868a24245120b38, type: 3}
   bulletVelocity: 10
-  isPistol: 1
-  isRifle: 0
-  isShotgun: 0
+  weaponType: 0
   shotgunSpread: 0
   pelletCount: 0
   isAutoActive: 0

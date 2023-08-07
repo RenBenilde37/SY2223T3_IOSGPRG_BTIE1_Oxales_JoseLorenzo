@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3692464693704127118}
   - component: {fileID: 3692464693704127116}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3692464693878071030}
   - component: {fileID: 3692464693878071031}
   - component: {fileID: 3692464693878071028}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf73e9cb425e314e932a5b235d376e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunType: Pistol
+  weaponType: 0
 --- !u!58 &3692464693878071028
 CircleCollider2D:
   m_ObjectHideFlags: 0

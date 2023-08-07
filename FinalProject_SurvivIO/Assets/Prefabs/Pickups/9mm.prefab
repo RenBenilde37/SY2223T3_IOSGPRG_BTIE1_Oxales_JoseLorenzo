@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7792226320580042101}
   - component: {fileID: 7792226320580042107}
   - component: {fileID: 7792226320580042106}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 9mm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,9 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1876dc7d408b2784ca7a30b9e898999f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  is9mm: 1
+  is9mm: 0
   is556mm: 0
   is12ga: 0
+  WeaponType: 0
 --- !u!61 &7792226320580042106
 BoxCollider2D:
   m_ObjectHideFlags: 0

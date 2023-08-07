@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5619503319585760813}
   - component: {fileID: 5619503319585760812}
   - component: {fileID: 5619503319585760811}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: 12ga
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
   is9mm: 0
   is556mm: 0
   is12ga: 1
+  WeaponType: 2
 --- !u!61 &5619503319585760811
 BoxCollider2D:
   m_ObjectHideFlags: 0

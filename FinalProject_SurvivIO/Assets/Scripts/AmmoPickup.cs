@@ -9,31 +9,33 @@ public class AmmoPickup : MonoBehaviour
     public bool is9mm;
     public bool is556mm;
     public bool is12ga;
+
+
+    public Gun.WeaponType WeaponType;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         string playerName = collision.gameObject.name;
 
-        if (collision.gameObject.name == "Player")
+        if (collision.gameObject.GetComponent<PlayerController>())
         {
             PlayerInventory player = collision.gameObject.GetComponent<PlayerInventory>();
 
-            if (is9mm) { 
+            if (WeaponType == Gun.WeaponType.Pistol) { 
                 Debug.Log("Touched " + playerName);
                 player.ammoPistol.AddClip();
             }
 
-            if (is556mm)
+            if (WeaponType == Gun.WeaponType.Rifle)
             {
                 Debug.Log("Touched " + playerName);
                 player.ammoRifle.AddClip();
             }
 
-            if (is12ga)
+            if (WeaponType == Gun.WeaponType.Shotgun)
             {
                 Debug.Log("Touched " + playerName);
                 player.ammoShotgun.AddClip();
             }
-
             Destroy(gameObject);
         }
     }
